@@ -106,7 +106,7 @@ async def on_message(msg):
             data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
 
             song = data['url']
-            player = discord.FFmpegPCMAudio(song, **ffmpeg_options")
+            player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
 
             voice_clients[msg.guild.id].play(player)
 
