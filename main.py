@@ -42,7 +42,7 @@ async def on_message(msg):
         if msg.content.lower().startswith(f"{prefix}info"):
             await msg.channel.send(f"Hi, Im JoksysBot Made By Joksy! Type `j!commands_help` for a list of commands to use!")
         if msg.content.lower().startswith(f"{prefix}commands_help"):
-            await msg.channel.send(f"These are the commands you can use: `j!info`. Give info, `j!commands_help`. Gives help, `j!play (youtube url here) `. Plays sound from a youtube video, `j!pause`. Pauses the audio from a youtube video, `j!resume`. Resumes the audio from a youtube video after a pause, `j!stop`. Stops the audio from a youtube video and leaves the voice call. `j!gandpreact`. Sends role buttons (need Admin role to use this command)")
+            await msg.channel.send(f"These are the commands you can use: `j!info`. Give info, `j!commands_help`. Gives help, `j!play (youtube url here) `. Plays sound from a youtube video, `j!pause`. Pauses the audio from a youtube video, `j!resume`. Resumes the audio from a youtube video after a pause, `j!stop`. Stops the audio from a youtube video and leaves the voice call. `j!addreaction` adds a reaction role of your liking (used like this: `j!addreactions role1 role2` and it will create role with the names of `role1` and `role2` but it can be anything you would like")
 
         if msg.content.lower().startswith(f"{prefix}gandpreact"):
             if "Admin" in str(msg.author.roles):
@@ -129,6 +129,43 @@ async def on_message(msg):
                 await voice_clients[msg.guild.id].disconnect()
             except Exception as err:
                 print(err)
+        if msg.content.startswith(f"{prefix}addreaction"):
+            
+            guild = msg.guild
+
+            rolename1 = msg.content.split()[1]
+            rolename2 = msg.content.split()[2]
+
+            print(f"Found the role name {rolename1}")
+            print(f"Found the role name {rolename2} too")
+
+            await msg.guild.create_role(name=rolename1)
+            await msg.guild.create_role(name=rolename2)
+
+            role1 = discord.utils.get(guild.roles, name=rolename1)
+            role2 = discord.utils.get(guild.roles, name=rolename2)
+
+            async def rolebutton1callback(interaction):
+                    await interaction.response.send_message(f"Added {rolename1} role!", ephemeral=True)
+                    user = interaction.user
+                    await user.add_roles(role1)
+
+            async def rolebutton2callback(interaction):
+                    await interaction.response.send_message(f"Added {rolename2} role!", ephemeral=True)
+                    user = interaction.user
+                    await user.add_roles(role2)
+
+            role1button = Button(label=f"Click me for {rolename1} role", style=discord.ButtonStyle.blurple)
+            role1button.callback = rolebutton1callback
+            role2button = Button(label=f"Click me for {rolename2} role", style=discord.ButtonStyle.green)
+            role2button.callback = rolebutton2callback
+
+            view = View()
+            view.add_item(role1button)
+            view.add_item(role2button)
+            await msg.channel.send("Click the button for a role", view=view)
+        elif "Admin" not in str(msg.author.roles):
+                await msg.channel.send("You need Admin role to use that command!")
 
 
 client.run(token)
