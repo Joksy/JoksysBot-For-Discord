@@ -130,42 +130,45 @@ async def on_message(msg):
             except Exception as err:
                 print(err)
         if msg.content.startswith(f"{prefix}addreaction"):
-            
-            guild = msg.guild
+            if "Admin" in str(msg.author.roles):
+                guild = msg.guild
 
-            rolename1 = msg.content.split()[1]
-            rolename2 = msg.content.split()[2]
+                rolename1 = msg.content.split()[1]
+                rolename2 = msg.content.split()[2]
 
-            print(f"Found the role name {rolename1}")
-            print(f"Found the role name {rolename2} too")
+                print(f"Found the role name {rolename1}")
+                print(f"Found the role name {rolename2} too")
 
-            await msg.guild.create_role(name=rolename1)
-            await msg.guild.create_role(name=rolename2)
+                await msg.guild.create_role(name=rolename1)
+                await msg.guild.create_role(name=rolename2)
 
-            role1 = discord.utils.get(guild.roles, name=rolename1)
-            role2 = discord.utils.get(guild.roles, name=rolename2)
+                role1 = discord.utils.get(guild.roles, name=rolename1)
+                role2 = discord.utils.get(guild.roles, name=rolename2)
 
-            async def rolebutton1callback(interaction):
+                async def rolebutton1callback(interaction):
                     await interaction.response.send_message(f"Added {rolename1} role!", ephemeral=True)
                     user = interaction.user
                     await user.add_roles(role1)
 
-            async def rolebutton2callback(interaction):
+                async def rolebutton2callback(interaction):
                     await interaction.response.send_message(f"Added {rolename2} role!", ephemeral=True)
                     user = interaction.user
                     await user.add_roles(role2)
 
-            role1button = Button(label=f"Click me for {rolename1} role", style=discord.ButtonStyle.blurple)
-            role1button.callback = rolebutton1callback
-            role2button = Button(label=f"Click me for {rolename2} role", style=discord.ButtonStyle.green)
-            role2button.callback = rolebutton2callback
+                role1button = Button(label=f"Click me for {rolename1} role", style=discord.ButtonStyle.blurple)
+                role1button.callback = rolebutton1callback
+                role2button = Button(label=f"Click me for {rolename2} role", style=discord.ButtonStyle.green)
+                role2button.callback = rolebutton2callback
 
-            view = View()
-            view.add_item(role1button)
-            view.add_item(role2button)
-            await msg.channel.send("Click the button for a role", view=view)
-        elif "Admin" not in str(msg.author.roles):
-                await msg.channel.send("You need Admin role to use that command!")
+                view = View()
+                view.add_item(role1button)
+                view.add_item(role2button)
+                await msg.channel.send("Click the button for a role", view=view)
+            elif "Admin" not in str(msg.author.roles):
+                await msg.channel.send("You need Admin to use that command")
+        
+            
+            
 
 
 client.run(token)
