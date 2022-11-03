@@ -12,7 +12,7 @@ from discord.ui import Button
 from discord.ui import View
 import random
 
-token = "OTg1MTE0MTQ4Njc1Mzg3NDAy.Goqmc4.TPdDaKOfrIO2DRNJL782Xg4JuyzcSOhHfltmaY"
+token = ""
 prefix = "j!"
 blocked_words = ["fuck", "shit", "pis", "lort", "homo", "bitch", "nigga", "nigger", "neger", "pik", "diller"]
 
