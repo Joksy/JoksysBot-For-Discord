@@ -14,7 +14,6 @@ import random
 
 token = ""
 prefix = "j!"
-blocked_words = ["fuck", "shit", "pis", "lort", "homo", "bitch", "nigga", "nigger", "neger", "pik", "diller"]
 
 voice_clients = {}
 
